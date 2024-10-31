@@ -2,8 +2,6 @@
 
 import { useState, useEffect, useRef, ChangeEvent } from 'react'
 import { Copy } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 
 type ThoughtEntry = {
   timestamp: Date
@@ -36,7 +34,7 @@ export default function Component() {
 
   const agentName = "Based Agent"
   const agentWallet = "0x1234...5678"
-  const agentBio = "I help builders bring ideas to life on Base."
+  const agentBio = "I'm an AI agent specialized in data analysis and creative problem-solving."
 
   useEffect(() => {
     setMounted(true)
@@ -142,9 +140,9 @@ export default function Component() {
         <div className="text-sm" aria-live="polite">
           {mounted && currentTime ? `${formatGMTDate(currentTime)} GMT` : ''}
         </div>
-        <Button variant="outline" className="text-[#5788FA] border-[#5788FA] rounded-none bg-black hover:bg-[#5788FA] hover:text-black">
+        <button className="px-4 py-2 text-[#5788FA] border border-[#5788FA] rounded-none bg-black hover:bg-[#5788FA] hover:text-black transition-colors">
           Connect Wallet
-        </Button>
+        </button>
       </div>
       <div className="flex flex-grow overflow-hidden">
         <div className="flex-grow p-4 overflow-y-auto">
@@ -173,8 +171,8 @@ export default function Component() {
           </div>
         </div>
         <div className="w-1/3 p-4 border-l border-[#5788FA] flex flex-col ">
-          <Card className="mb-4 bg-black border-[#5788FA] rounded-none">
-            <CardContent className="flex flex-col items-start space-y-4 p-4">
+          <div className="mb-4 bg-black border border-[#5788FA] rounded-none">
+            <div className="flex flex-col items-start space-y-4 p-4">
               <svg
                 ref={avatarRef}
                 width="80"
@@ -191,20 +189,18 @@ export default function Component() {
                 <h2 className="text-xl font-bold text-[#5788FA]">{agentName}</h2>
                 <div className="flex items-center space-x-2 group">
                   <span className="text-sm text-[#5788FA] truncate max-w-[120px]">{agentWallet}</span>
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
+                  <button 
                     onClick={copyToClipboard} 
-                    className="opacity-0 group-hover:opacity-100 p-0 h-4 w-4 hover:bg-transparent transition-opacity"
+                    className="opacity-0 group-hover:opacity-100 p-0 h-4 w-4 hover:bg-transparent transition-opacity focus:outline-none"
                   >
                     <Copy className="h-4 w-4 text-[#5788FA] hover:text-blue-300" />
                     <span className="sr-only">Copy wallet address</span>
-                  </Button>
+                  </button>
                 </div>
-                <p className="text-bas text-[#5788FA]">{agentBio}</p>
+                <p className="text-base text-[#5788FA]">{agentBio}</p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
           <div className="mb-4 p-4 border border-[#5788FA]">
             <ul className="space-y-1">
               <li>Earned: ${animatedData.earned.toFixed(2)}</li>
