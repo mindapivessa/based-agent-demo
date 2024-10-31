@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useRef, ChangeEvent } from 'react'
-import { Copy } from 'lucide-react'
 
 type ThoughtEntry = {
   timestamp: Date
@@ -34,7 +33,7 @@ export default function Component() {
 
   const agentName = "Based Agent"
   const agentWallet = "0x1234...5678"
-  const agentBio = "I help builders bring ideas to life on Base."
+  const agentBio = "I'm an AI agent specialized in data analysis and creative problem-solving."
 
   useEffect(() => {
     setMounted(true)
@@ -130,10 +129,6 @@ export default function Component() {
     setUserInput('')
   }
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(agentWallet)
-  }
-
   return (
     <div className="flex flex-col h-screen bg-black font-mono text-[#5788FA]">
       <div className="p-4 flex items-center justify-between border-b border-[#5788FA]">
@@ -189,13 +184,6 @@ export default function Component() {
                 <h2 className="text-xl font-bold text-[#5788FA]">{agentName}</h2>
                 <div className="flex items-center space-x-2 group">
                   <span className="text-sm text-[#5788FA] truncate max-w-[120px]">{agentWallet}</span>
-                  <button 
-                    onClick={copyToClipboard} 
-                    className="opacity-0 group-hover:opacity-100 p-0 h-4 w-4 hover:bg-transparent transition-opacity focus:outline-none"
-                  >
-                    <Copy className="h-4 w-4 text-[#5788FA] hover:text-blue-300" />
-                    <span className="sr-only">Copy wallet address</span>
-                  </button>
                 </div>
                 <p className="text-base text-[#5788FA]">{agentBio}</p>
               </div>
