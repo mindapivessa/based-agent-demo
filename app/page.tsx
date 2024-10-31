@@ -131,7 +131,7 @@ export default function Component() {
           </div>
         </div>
         <div className="w-1/3 p-4 border-l border-[#5788FA] flex flex-col">
-          <div className="mb-4 p-4 border border-[#5788FA] rounded">
+          <div className="mb-4 p-4 border border-[#5788FA]">
             <ul className="space-y-1">
               <li>Earned: ${animatedData.earned.toFixed(2)} ({(animatedData.earned / 2000).toFixed(2)} ETH)</li>
               <li>Spent: ${animatedData.spent.toFixed(2)} ({(animatedData.spent / 2000).toFixed(2)} ETH)</li>
@@ -150,7 +150,7 @@ export default function Component() {
               />
               <button
                 type="submit"
-                className="absolute bottom-2 right-2 bg-[#5788FA] text-black px-4 py-1 rounded- hover:bg-[#3D7BFF] transition-colors"
+                className="absolute bottom-2 right-2 bg-[#5788FA] text-black px-6 py-1.5 hover:bg-[#3D7BFF] transition-colors"
               >
                 Send
               </button>
