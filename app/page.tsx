@@ -107,7 +107,7 @@ export default function Component() {
       </div>
       <div className="flex flex-grow overflow-hidden">
         <div className="flex-grow p-4 overflow-y-auto">
-          <p>Welcome to Based Agent v1.0.0</p>
+
           <p>Streaming real-time thoughts and actions...</p>
           <div className="mt-4 space-y-2" role="log" aria-live="polite">
             {thoughts.map((thought, index) => (
@@ -140,21 +140,21 @@ export default function Component() {
               <li>{animatedData.thoughts} thoughts</li>
             </ul>
           </div>
-          <form onSubmit={handleSubmit} className="flex flex-col flex-grow">
+          <form onSubmit={handleSubmit} className="flex-grow flex flex-col">
             <div className="relative flex-grow">
               <textarea
                 value={userInput}
                 onChange={handleInputChange}
-                className="w-full h-full bg-black border border-[#5788FA] text-[#5788FA] p-2 resize-none placeholder-[#5788FA] placeholder-opacity-50"
+                className="w-full h-full bg-black border border-[#5788FA] text-[#5788FA] p-2 pb-12 resize-none placeholder-[#5788FA] placeholder-opacity-50"
                 placeholder="Type your prompt here..."
               />
+              <button
+                type="submit"
+                className="absolute bottom-2 right-2 bg-[#5788FA] text-black px-4 py-1 rounded- hover:bg-[#3D7BFF] transition-colors"
+              >
+                Send
+              </button>
             </div>
-            <button
-              type="submit"
-              className="bg-[#5788FA] text-black px-4 py-2 rounded hover:bg-[#3D7BFF] transition-colors mt-4"
-            >
-              Send
-            </button>
           </form>
         </div>
       </div>
