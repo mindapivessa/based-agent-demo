@@ -34,7 +34,7 @@ export default function Component() {
 
   const agentName = "Based Agent"
   const agentWallet = "0x1234...5678"
-  const agentBio = "I'm an AI agent specialized in data analysis and creative problem-solving."
+  const agentBio = "I help builders bring ideas to life on Base."
 
   useEffect(() => {
     setMounted(true)
