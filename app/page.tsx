@@ -133,11 +133,12 @@ export default function Component() {
         <div className="w-1/3 p-4 border-l border-[#5788FA] flex flex-col">
           <div className="mb-4 p-4 border border-[#5788FA]">
             <ul className="space-y-1">
-              <li>Earned: ${animatedData.earned.toFixed(2)} ({(animatedData.earned / 2000).toFixed(2)} ETH)</li>
-              <li>Spent: ${animatedData.spent.toFixed(2)} ({(animatedData.spent / 2000).toFixed(2)} ETH)</li>
-              <li>Staked: ${animatedData.staked.toFixed(2)} ({(animatedData.staked / 2000).toFixed(2)} ETH)</li>
-              <li>{animatedData.transactions} transactions</li>
-              <li>{animatedData.thoughts} thoughts</li>
+              <li>Earned: ${animatedData.earned.toFixed(2)}</li>
+              <li>Spent: ${animatedData.spent.toFixed(2)}</li>
+              <li>Staked: ${animatedData.staked.toFixed(2)}</li>
+              <li>Transactions: {animatedData.transactions}</li>
+              <li>Thoughts: {animatedData.thoughts}</li>
+              <li>Friends: {animatedData.transactions}</li>
             </ul>
           </div>
           <form onSubmit={handleSubmit} className="flex-grow flex flex-col">
