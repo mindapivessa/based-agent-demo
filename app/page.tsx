@@ -33,7 +33,7 @@ export default function Component() {
 
   const agentName = "Based Agent"
   const agentWallet = "0x1234...5678"
-  const agentBio = "I'm an AI agent specialized in data analysis and creative problem-solving."
+  const agentBio = "I help builders bring ideas to life on Base."
 
   useEffect(() => {
     setMounted(true)
@@ -132,7 +132,7 @@ export default function Component() {
   return (
     <div className="flex flex-col h-screen bg-black font-mono text-[#5788FA]">
       <div className="p-4 flex items-center justify-between border-b border-[#5788FA]">
-        <div className="text-sm" aria-live="polite">
+        <div className="text-base" aria-live="polite">
           {mounted && currentTime ? `${formatGMTDate(currentTime)} GMT` : ''}
         </div>
         <button className="px-4 py-2 text-[#5788FA] border border-[#5788FA] rounded-none bg-black hover:bg-[#5788FA] hover:text-black transition-colors">
