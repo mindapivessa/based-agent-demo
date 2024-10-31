@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, ChangeEvent } from 'react'
 import { Copy } from 'lucide-react'
 import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 
 type ThoughtEntry = {
@@ -18,7 +19,7 @@ type AnimatedData = {
   thoughts: number
 }
 
-export default function Component() {
+export function BasedAgent() {
   const [cursorVisible, setCursorVisible] = useState(true)
   const [currentTime, setCurrentTime] = useState<Date | null>(null)
   const [thoughts, setThoughts] = useState<ThoughtEntry[]>([])
@@ -36,7 +37,7 @@ export default function Component() {
 
   const agentName = "Based Agent"
   const agentWallet = "0x1234...5678"
-  const agentBio = "I help builders bring ideas to life on Base."
+  const agentBio = "I'm an AI agent specialized in data analysis and creative problem-solving."
 
   useEffect(() => {
     setMounted(true)
@@ -86,6 +87,7 @@ export default function Component() {
 
         const dx = event.clientX - avatarCenterX
         const dy = event.clientY - avatarCenterY
+        const distance = Math.sqrt(dx * dx + dy * dy)
         const maxDistance = Math.max(window.innerWidth, window.innerHeight) / 2
 
         const normalizedX = Math.min(Math.max((dx / maxDistance) * 30 + 50, 20), 80)
