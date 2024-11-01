@@ -191,9 +191,9 @@ export default function Component() {
           </div>
           <div className="mb-4 p-4 border border-[#5788FA]">
             <ul className="space-y-1">
-              <li>Earned: ${animatedData.earned.toFixed(2)}</li>
-              <li>Spent: ${animatedData.spent.toFixed(2)}</li>
-              <li>Staked: ${animatedData.staked.toFixed(2)}</li>
+              <li>Earned: {animatedData.earned.toFixed(2)} $AGENT</li>
+              <li>Spent: {animatedData.spent.toFixed(2)} $AGENT</li>
+              <li>Staked: {animatedData.staked.toFixed(2)} $AGENT</li>
               <li>Actions: {animatedData.transactions}</li>
               <li>Thoughts: {animatedData.thoughts}</li>
             </ul>
