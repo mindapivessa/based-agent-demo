@@ -3,6 +3,11 @@
 import { useState, useEffect, useRef, ChangeEvent } from 'react'
 import WalletSvg from '@/public/components/walletSvg'
 import SendSvg from '@/public/components/sendSvg'
+import RequestSvg from '@/public/components/requestSvg'
+import SwapSvg from '@/public/components/swapSvg'
+import NftSvg from '@/public/components/nftSvg'
+import TokenSvg from '@/public/components/tokenSvg'
+
 
 type ThoughtEntry = {
   timestamp: Date
@@ -12,7 +17,7 @@ type ThoughtEntry = {
 
 type ActionEntry = {
   timestamp: Date
-  type: 'create_wallet' | 'deploy_token' | 'transfer_token' | 'swap_token'
+  type: 'create_wallet' | 'request_faucet_funds' | 'get_balance' | 'swap_token' | 'transfer_token' | 'transfer_nft'
   content: string
 }
 
@@ -144,12 +149,12 @@ export default function Component() {
 
   const generateRandomAction = (): ActionEntry => {
     const actions = [
-      { type: 'create_wallet', content: 'Created new wallet' },
-      { type: 'deploy_token', content: 'Deployed new ERC-20 token' },
-      { type: 'deploy_token', content: 'Deployed new NFT collection' },
-      { type: 'transfer_token', content: 'Transferred 100 USDT to 0x1234...5678' },
-      { type: 'transfer_token', content: 'Transferred NFT #1234 to 0x5678...9012' },
-      { type: 'swap_token', content: 'Swapped 10 ETH for 15000 USDT' },
+      { type: 'create_wallet', content: 'Created a new wallet 0x453b...3432' },
+      { type: 'request_faucet_funds', content: 'Requested and received 0.01 ETH from the faucet' },
+      { type: 'get_balance', content: '0x4534...d342\'s balance is 1003.45 USDC' },
+      { type: 'transfer_token', content: 'Transferred 100 USDC to 0x1234...5678' },
+      { type: 'transfer_nft', content: 'Transferred NFT #1234 to 0x5678...9012' },
+      { type: 'swap_token', content: 'Swapped 10 ETH for 15000 USDC' },
     ] as const
     const randomAction = actions[Math.floor(Math.random() * actions.length)]
     return {
@@ -186,12 +191,16 @@ export default function Component() {
         switch (entry.type) {
           case 'create_wallet':
             return <WalletSvg />
-          case 'deploy_token':
-            return <WalletSvg />
-          case 'transfer_token':
+          case 'request_faucet_funds':
+            return <RequestSvg />
+          case 'get_balance':
             return <WalletSvg />
           case 'swap_token':
-            return <WalletSvg />
+            return <SwapSvg />
+          case 'transfer_nft':
+            return <NftSvg />
+          case 'transfer_token':
+            return <TokenSvg />
         }
       }
 
