@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, ChangeEvent } from 'react'
 import WalletSvg from '@/public/components/walletSvg'
+import SendSvg from '@/public/components/sendSvg'
 
 type ThoughtEntry = {
   timestamp: Date
@@ -245,20 +246,20 @@ export default function Component() {
                 </span>
               </div>
             </div>
-            <form onSubmit={handleSubmit} className="p-4 border-t border-[#5788FA]">
+            <form onSubmit={handleSubmit} className="p-4 border-t border-[#5788FA] ">
               <div className="relative">
                 <textarea
                   value={userInput}
                   onChange={handleInputChange}
-                  className="w-full bg-black border border-[#5788FA] text-[#5788FA] p-2 pr-24 resize-none placeholder-[#5788FA] placeholder-opacity-50"
+                  className="w-full h-20 bg-black border border-[#5788FA] text-[#5788FA] p-2 pr-10 placeholder-[#5788FA] placeholder-opacity-50"
                   placeholder="What's on your mind?"
                   rows={1}
                 />
                 <button
                   type="submit"
-                  className="absolute top-1/2 right-2 -translate-y-1/2 bg-[#5788FA] text-black px-6 py-1.5 hover:bg-[#3D7BFF] transition-colors"
+                  className="absolute bottom-1 right-2 -translate-y-1/2 bg-[#5788FA] text-black p-1.5 hover:bg-[#3D7BFF] transition-colors rounded-sm"
                 >
-                  Send
+                  <SendSvg />
                 </button>
               </div>
             </form>
