@@ -79,6 +79,7 @@ export default function Component() {
         earned: prev.earned + Math.random() * 10,
         spent: prev.spent + Math.random() * 5,
         nftsOwned: prev.nftsOwned + (Math.random() > 0.95 ? 1 : 0),
+        tokensOwned: prev.tokensOwned + (Math.random() > 0.98 ? 1 : 0),
         transactions: prev.transactions,
         thoughts: prev.thoughts
       }))
