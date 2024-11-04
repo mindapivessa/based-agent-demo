@@ -154,7 +154,7 @@ export default function Component() {
       clearInterval(streamInterval)
       clearInterval(dataInterval)
     }
-  }, [currentLang, generateRandomThought, generateRandomAction])
+  }, [currentLang])
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
