@@ -10,6 +10,7 @@ import TokenSvg from '@/public/components/tokenSvg'
 import LanguageSelector from '@/public/components/LanguageSelector'
 import { translations } from '@/app/translations'
 import { Noto_Sans_Thai } from 'next/font/google'
+import TimeDisplay from '@/public/components/TimeDisplay'
 
 const notoSansThai = Noto_Sans_Thai({
   weight: ['400', '700'],
@@ -143,20 +144,6 @@ export default function Component() {
     return () => clearInterval(dotInterval)
   }, [])
 
-  const formatThailandDate = (date: Date) => {
-    return date.toLocaleString('en-US', { 
-      timeZone: 'Asia/Bangkok',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-      formatMatcher: 'basic'
-    }).replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$1-$2')
-  }
-
   const generateRandomThought = (): ThoughtEntry => {
     const thoughts = [
       translations[currentLang].thoughts.analyzing,
@@ -243,58 +230,44 @@ export default function Component() {
       })
   }
 
-  const renderStreamEntry = (entry: StreamEntry, index: number) => {
-    if ('type' in entry) {
-      if (entry.type === 'user') {
-        return (
-          <div key={index} className="mb-2 flex flex-col items-end">
-            <div className={`text-xs text-gray-500 ${currentLang === 'th' ? notoSansThai.className : ''}`}>
-              {translations[currentLang].stream.youAt} {formatThailandDate(entry.timestamp)}
-            </div>
-            <div className={`text-[#5788FA] max-w-[80%] ${currentLang === 'th' ? notoSansThai.className : ''}`}>
-              {entry.content}
-            </div>
-          </div>
-        )
-      }
-      // Action entry
-      const getIcon = () => {
-        switch (entry.type) {
-          case 'create_wallet':
-            return <div className="w-4 h-4"><WalletSvg /></div>
-          case 'request_faucet_funds':
-            return <div className="w-4 h-4"><RequestSvg /></div>
-          case 'get_balance':
-            return <div className="w-4 h-4"><WalletSvg /></div>
-          case 'swap_token':
-            return <div className="w-4 h-4"><SwapSvg /></div>
-          case 'transfer_nft':
-            return <div className="w-4 h-4"><NftSvg /></div>
-          case 'transfer_token':
-            return <div className="w-4 h-4"><TokenSvg /></div>
-        }
-      }
+  const getActionIcon = (type: ActionEntry['type']) => {
+    switch (type) {
+      case 'create_wallet': return <WalletSvg />
+      case 'request_faucet_funds': return <TokenSvg />
+      case 'get_balance': return <WalletSvg />
+      case 'swap_token': return <SwapSvg />
+      case 'transfer_token': return <SendSvg />
+      case 'transfer_nft': return <NftSvg />
+      case 'user': return <SendSvg />
+      default: return null
+    }
+  }
 
+  const renderStreamEntry = (entry: StreamEntry, index: number) => {
+    if (entry.type) {
+      // Action entry
       return (
         <div key={index} className="mb-2">
-          <div className="text-xs text-gray-500">{formatThailandDate(entry.timestamp)}</div>
-          <div className={`flex items-center ${currentLang === 'th' ? notoSansThai.className : ''}`}>
-            {getIcon()}
-            <span className="pl-2">{entry.content}</span>
-          </div>
-        </div>
-      )
-    } else {
-      // Thought entry
-      return (
-        <div key={index} className="mb-2">
-          <div className="text-xs text-gray-500">{formatThailandDate(entry.timestamp)}</div>
-          <div className={`text-gray-300 ${currentLang === 'th' ? notoSansThai.className : ''}`}>
-            {entry.content}
+          <TimeDisplay timestamp={entry.timestamp} />
+          <div className={`flex items-center space-x-2 text-[#5788FA] ${
+            currentLang === 'th' ? notoSansThai.className : ''
+          }`}>
+            {getActionIcon(entry.type)}
+            <span>{entry.content}</span>
           </div>
         </div>
       )
     }
+    
+    // Thought entry
+    return (
+      <div key={index} className="mb-2">
+        <TimeDisplay timestamp={entry.timestamp} />
+        <div className={`text-gray-300 ${currentLang === 'th' ? notoSansThai.className : ''}`}>
+          {entry.content}
+        </div>
+      </div>
+    )
   }
 
   useEffect(() => {
@@ -307,6 +280,13 @@ export default function Component() {
       {/* Header with smoother animated dot */}
       <div className="flex justify-between items-center p-4 border-b border-[#5788FA]">
         <div className="flex items-center space-x-2">
+          {/* Mobile menu button */}
+          <button 
+            className="lg:hidden mr-2"
+            onClick={() => setIsMobileMenuOpen(prev => !prev)}
+          >
+            ☰
+          </button>
           <div 
             className={`
               w-2 h-2 rounded-full 
@@ -317,7 +297,7 @@ export default function Component() {
               }
             `}
           />
-          <span className={`text-sm ${currentLang === 'th' ? notoSansThai.className : ''}`}>
+          <span className={`text-sm text-zinc-50 ${currentLang === 'th' ? notoSansThai.className : ''}`}>
             {translations[currentLang].header.liveOn}
           </span>
         </div>
@@ -370,7 +350,7 @@ export default function Component() {
                       {agentWallet}
                     </button>
                     {showToast && (
-                      <div className="absolute top-full left-0 mt-2 bg-[#5788FA] text-black text-xs px-2 py-1 rounded-xs">
+                      <div className="absolute top-full left-0 mt-2 bg-[#5788FA] text-zinc-950 text-xs px-2 py-1 rounded-xs">
                         Copied
                       </div>
                     )}
@@ -470,7 +450,7 @@ export default function Component() {
                 </div>
                 <button
                   type="submit"
-                  className="bg-[#5788FA] text-black p-1.5 hover:bg-[#3D7BFF] transition-colors rounded-sm"
+                  className="bg-[#5788FA] text-zinc-950 p-1.5 hover:bg-[#3D7BFF] transition-colors rounded-sm"
                 >
                   <SendSvg />
                 </button>
