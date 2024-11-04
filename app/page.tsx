@@ -439,12 +439,12 @@ export default function Component() {
                     {translations[currentLang].chat.suggestions.create}
                   </button>
                   <button 
-                    onClick={() => setUserInput(translations[currentLang].chat.suggestions.positions)}
+                    onClick={() => setUserInput(translations[currentLang].chat.suggestions.swap)}
                     className={`text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA]/50 px-2 py-1 rounded-sm ${
                       currentLang === 'th' ? notoSansThai.className : ''
                     }`}
                   >
-                    {translations[currentLang].chat.suggestions.positions}
+                    {translations[currentLang].chat.suggestions.swap}
                   </button>
                 </div>
                 <button

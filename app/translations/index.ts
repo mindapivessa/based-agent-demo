@@ -23,7 +23,7 @@ export const translations = {
       suggestions: {
         send: 'Send 5 USDC to jesse.base.eth',
         create: 'Create a new wallet with 10 USDC',
-        positions: 'What are my trading positions?'
+        swap: 'Swap 10 USDC for ETH'
       }
     },
     actions: {
