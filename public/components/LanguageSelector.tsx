@@ -20,10 +20,10 @@ export default function LanguageSelector({ currentLang, onLanguageChange }: Lang
           onClick={() => onLanguageChange(code)}
           style={{ width: '44px' }}
           className={`
-            py-1 text-sm font-medium text-center
+            py-1 text-sm font-medium text-center transition-colors
             ${currentLang === code 
-              ? 'bg-[#5788FA] text-black' 
-              : 'hover:bg-[#5788FA]/10'
+              ? 'bg-[#5788FA] text-black hover:bg-[#3D7BFF]' 
+              : 'hover:bg-zinc-900 hover:text-[#3D7BFF]'
             }
             ${code !== 'en' && 'border-l border-[#5788FA]'}
           `}

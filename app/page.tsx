@@ -62,6 +62,7 @@ export default function Component() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [showToast, setShowToast] = useState(false)
   const [currentLang, setCurrentLang] = useState<Language>('en')
+  const [isLiveDotVisible, setIsLiveDotVisible] = useState(true)
 
   const agentName = "Based Agent"
   const agentWallet = "0x1234...5678"
@@ -132,6 +133,14 @@ export default function Component() {
     }, 500)
 
     return () => clearInterval(dotsInterval)
+  }, [])
+
+  useEffect(() => {
+    const dotInterval = setInterval(() => {
+      setIsLiveDotVisible(prev => !prev)
+    }, 1000)
+
+    return () => clearInterval(dotInterval)
   }, [])
 
   const formatThailandDate = (date: Date) => {
@@ -295,30 +304,24 @@ export default function Component() {
 
   return (
     <div className="flex flex-col h-screen bg-black font-mono text-[#5788FA] relative overflow-hidden">
-      {/* Header */}
-      <div className="p-4 flex items-center justify-between border-b border-[#5788FA] relative z-10">
-        <div className="flex items-center">
-          <button 
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden text-[#5788FA] p-2"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>
-            </svg>
-          </button>
-          <div className="flex items-center space-x-2">
-            <div className="h-2.5 w-2.5 rounded-full bg-green-400 animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.5)]"></div>
-            <span className="text-zinc-50 text-sm">
-              {translations[currentLang].header.liveOn}
-            </span>
-          </div>
-        </div>
-        <div className="flex items-center">
-          <LanguageSelector 
-            currentLang={currentLang}
-            onLanguageChange={setCurrentLang}
+      {/* Header with smoother animated dot */}
+      <div className="flex justify-between items-center p-4 border-b border-[#5788FA]">
+        <div className="flex items-center space-x-2">
+          <div 
+            className={`
+              w-2 h-2 rounded-full 
+              transition-all duration-700 ease-in-out
+              ${isLiveDotVisible 
+                ? 'bg-green-500 opacity-100' 
+                : 'bg-green-500 opacity-40'
+              }
+            `}
           />
+          <span className={`text-sm ${currentLang === 'th' ? notoSansThai.className : ''}`}>
+            {translations[currentLang].header.liveOn}
+          </span>
         </div>
+        <LanguageSelector currentLang={currentLang} onLanguageChange={setCurrentLang} />
       </div>
 
       {/* Content Area */}
@@ -432,7 +435,9 @@ export default function Component() {
                 value={userInput}
                 onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
-                className="w-full h-24 lg:h-36 bg-black text-[#5788FA] p-4 pr-10 placeholder-[#5788FA] placeholder-opacity-50"
+                className={`w-full h-24 lg:h-36 bg-black text-[#5788FA] p-4 pr-10 placeholder-[#5788FA] placeholder-opacity-50 ${
+                  currentLang === 'th' ? notoSansThai.className : ''
+                }`}
                 placeholder={translations[currentLang].chat.placeholder}
                 rows={1}
               />
@@ -440,19 +445,25 @@ export default function Component() {
                 <div className="flex space-x-2 text-xs lg:text-sm ml-2 overflow-x-auto">
                   <button 
                     onClick={() => setUserInput(translations[currentLang].chat.suggestions.send)}
-                    className="text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1 rounded-sm"
+                    className={`text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1 rounded-sm ${
+                      currentLang === 'th' ? notoSansThai.className : ''
+                    }`}
                   >
                     {translations[currentLang].chat.suggestions.send}
                   </button>
                   <button 
                     onClick={() => setUserInput(translations[currentLang].chat.suggestions.create)}
-                    className="text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1 rounded-sm"
+                    className={`text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1 rounded-sm ${
+                      currentLang === 'th' ? notoSansThai.className : ''
+                    }`}
                   >
                     {translations[currentLang].chat.suggestions.create}
                   </button>
                   <button 
                     onClick={() => setUserInput(translations[currentLang].chat.suggestions.positions)}
-                    className="text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1 rounded-sm"
+                    className={`text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1 rounded-sm ${
+                      currentLang === 'th' ? notoSansThai.className : ''
+                    }`}
                   >
                     {translations[currentLang].chat.suggestions.positions}
                   </button>
