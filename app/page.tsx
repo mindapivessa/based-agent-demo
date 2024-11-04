@@ -7,6 +7,7 @@ import RequestSvg from '@/public/components/requestSvg'
 import SwapSvg from '@/public/components/swapSvg'
 import NftSvg from '@/public/components/nftSvg'
 import TokenSvg from '@/public/components/tokenSvg'
+import dynamic from 'next/dynamic'
 
 
 type ThoughtEntry = {
@@ -32,6 +33,23 @@ type AnimatedData = {
   thoughts: number
 }
 
+// Create a client-only time component
+const TimeDisplay = dynamic(() => Promise.resolve(({ currentTime }: { currentTime: Date }) => (
+  <div className="text-sm" aria-live="polite">
+    {currentTime.toLocaleString('en-US', { 
+      timeZone: 'Asia/Bangkok',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      formatMatcher: 'basic'
+    }).replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$1-$2')} ICT
+  </div>
+)), { ssr: false })
+
 export default function Component() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cursorVisible, setCursorVisible] = useState(true)
@@ -51,6 +69,7 @@ export default function Component() {
   const [walletBalance, setWalletBalance] = useState(5000) // Initial wallet balance
   const [isThinking, setIsThinking] = useState(true)
   const [loadingDots, setLoadingDots] = useState('')
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const agentName = "Based Agent"
   const agentWallet = "0x1234...5678"
@@ -265,28 +284,42 @@ export default function Component() {
 
   return (
     <div className="flex flex-col h-screen bg-black font-mono text-[#5788FA] relative overflow-hidden">
-      {/* Full-width Header */}
+      {/* Header */}
       <div className="p-4 flex items-center justify-between border-b border-[#5788FA] relative z-10">
-        <div className="flex flex-col space-y-2">
-          <div className="text-sm" aria-live="polite">
-            {formatThailandDate(currentTime)} ICT
-          </div>
+        <div className="flex items-center space-x-4">
+          <button 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="lg:hidden text-[#5788FA] p-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+          <TimeDisplay currentTime={currentTime} />
         </div>
         <div className="flex items-center space-x-2">
-          <div className={`
-            h-2.5 w-2.5 rounded-full 
-            bg-green-400
-            animate-pulse
-            shadow-[0_0_8px_rgba(74,222,128,0.5)]
-          `}></div>
+          <div className="h-2.5 w-2.5 rounded-full bg-green-400 animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.5)]"></div>
           <span className="text-white text-sm">Live on Base Sepolia</span>
         </div>
       </div>
 
       {/* Content Area */}
-      <div className="flex flex-grow overflow-hidden">
+      <div className="flex flex-grow overflow-hidden relative">
         {/* Left side - Profile and Stats Cards */}
-        <div className="w-1/3 p-4 border-r border-[#5788FA] flex flex-col overflow-y-auto">
+        <div className={`
+          ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+          lg:translate-x-0
+          fixed lg:relative
+          w-full lg:w-1/3 
+          h-full
+          bg-black
+          z-20 lg:z-0
+          transition-transform
+          duration-300
+          p-4 lg:border-r lg:border-[#5788FA] 
+          flex flex-col 
+          overflow-y-auto
+        `}>
           <div className="mb-4 bg-black border border-[#5788FA] rounded-none">
             <div className="flex flex-col items-start space-y-4 p-4">
  
@@ -335,8 +368,8 @@ export default function Component() {
         </div>
 
         {/* Right side - Stream and Chat */}
-        <div className="flex-grow flex flex-col">
-          <div className="flex-grow p-4 overflow-y-auto">
+        <div className="flex-grow flex flex-col w-full lg:w-2/3">
+          <div className="flex-grow p-4 pb-40 overflow-y-auto">
             <p>Streaming real-time...</p>
             <div className="mt-4 space-y-2" role="log" aria-live="polite">
               {streamEntries.map((entry, index) => renderStreamEntry(entry, index))}
@@ -347,27 +380,29 @@ export default function Component() {
               </div>
             )}
           </div>
-          <form onSubmit={handleSubmit} className="border-t border-[#5788FA] fixed bottom-0 right-0 w-2/3">
+          
+          {/* Chat Input */}
+          <form onSubmit={handleSubmit} className="fixed bottom-0 right-0 w-full lg:w-2/3 border-t border-[#5788FA] bg-black">
             <div className="relative">
               <textarea
                 value={userInput}
                 onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
-                className="w-full h-36 bg-black text-[#5788FA] p-4 pr-10 placeholder-[#5788FA] placeholder-opacity-50"
+                className="w-full h-24 lg:h-36 bg-black text-[#5788FA] p-4 pr-10 placeholder-[#5788FA] placeholder-opacity-50"
                 placeholder="What's on your mind?"
                 rows={1}
               />
               <div className="px-2 absolute bottom-0.5 right-0 flex items-center justify-between w-full -translate-y-1/2">
-                <div className="flex space-x-2 text-sm ml-2">
+                <div className="flex space-x-2 text-xs lg:text-sm ml-2 overflow-x-auto">
                   <button 
                     onClick={() => setUserInput("Send 5 USDC to jesse.base.eth")}
-                    className="text-[#5788FA] hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1"
+                    className="text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1"
                   >
                     Send 5 USDC to jesse.base.eth
                   </button>
                   <button 
                     onClick={() => setUserInput("Create a new wallet with 10 USDC")}
-                    className="text-[#5788FA] hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1"
+                    className="text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1"
                   >
                     Create a new wallet with 10 USDC
                   </button>
