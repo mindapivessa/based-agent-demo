@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, ChangeEvent } from 'react'
 import WalletSvg from '@/public/components/walletSvg'
 import SendSvg from '@/public/components/sendSvg'
-import RequestSvg from '@/public/components/requestSvg'
 import SwapSvg from '@/public/components/swapSvg'
 import NftSvg from '@/public/components/nftSvg'
 import TokenSvg from '@/public/components/tokenSvg'
@@ -11,6 +10,7 @@ import LanguageSelector from '@/public/components/LanguageSelector'
 import { translations } from '@/app/translations'
 import { Noto_Sans_Thai } from 'next/font/google'
 import TimeDisplay from '@/public/components/TimeDisplay'
+import RequestSvg from '@/public/components/requestSvg'
 
 const notoSansThai = Noto_Sans_Thai({
   weight: ['400', '700'],
@@ -68,82 +68,6 @@ export default function Component() {
   const agentName = "Based Agent"
   const agentWallet = "0x1234...5678"
 
-  useEffect(() => {
-    const cursorInterval = setInterval(() => {
-      setCursorVisible((v) => !v)
-    }, 530)
-
-    const streamInterval = setInterval(() => {
-      setIsThinking(true)
-      setTimeout(() => {
-        const newEntry = Math.random() > 0.3 ? generateRandomThought() : generateRandomAction()
-        setStreamEntries((prevEntries) => [...prevEntries, newEntry].slice(-10))
-        setAnimatedData((prev) => ({
-          ...prev,
-          thoughts: prev.thoughts + (newEntry.type === undefined ? 1 : 0),
-          transactions: prev.transactions + (newEntry.type !== undefined ? 1 : 0)
-        }))
-        setIsThinking(false)
-      }, 1500)
-    }, 3000)
-
-    const dataInterval = setInterval(() => {
-      setAnimatedData((prev) => ({
-        earned: prev.earned + Math.random() * 10,
-        spent: prev.spent + Math.random() * 5,
-        nftsOwned: prev.nftsOwned + (Math.random() > 0.95 ? 1 : 0),
-        tokensOwned: prev.tokensOwned + (Math.random() > 0.98 ? 1 : 0),
-        transactions: prev.transactions,
-        thoughts: prev.thoughts
-      }))
-      setWalletBalance((prev) => prev + (Math.random() - 0.5) * 100)
-    }, 2000)
-
-    return () => {
-      clearInterval(cursorInterval)
-      clearInterval(streamInterval)
-      clearInterval(dataInterval)
-    }
-  }, [currentLang])
-
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      if (avatarRef.current) {
-        const avatarRect = avatarRef.current.getBoundingClientRect()
-        const avatarCenterX = avatarRect.left + avatarRect.width / 2
-        const avatarCenterY = avatarRect.top + avatarRect.height / 2
-
-        const dx = event.clientX - avatarCenterX
-        const dy = event.clientY - avatarCenterY
-        const maxDistance = Math.max(window.innerWidth, window.innerHeight) / 2
-
-        const normalizedX = Math.min(Math.max((dx / maxDistance) * 30 + 50, 20), 80)
-        const normalizedY = Math.min(Math.max((dy / maxDistance) * 30 + 50, 20), 80)
-
-        setEyePosition({ x: normalizedX, y: normalizedY })
-      }
-    }
-
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
-
-  useEffect(() => {
-    const dotsInterval = setInterval(() => {
-      setLoadingDots(prev => prev.length >= 3 ? '' : prev + '.')
-    }, 500)
-
-    return () => clearInterval(dotsInterval)
-  }, [])
-
-  useEffect(() => {
-    const dotInterval = setInterval(() => {
-      setIsLiveDotVisible(prev => !prev)
-    }, 1000)
-
-    return () => clearInterval(dotInterval)
-  }, [])
-
   const generateRandomThought = (): ThoughtEntry => {
     const thoughts = [
       translations[currentLang].thoughts.analyzing,
@@ -194,6 +118,82 @@ export default function Component() {
     }
   }
 
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setCursorVisible((v) => !v)
+    }, 530)
+
+    const streamInterval = setInterval(() => {
+      setIsThinking(true)
+      setTimeout(() => {
+        const newEntry = Math.random() > 0.3 ? generateRandomThought() : generateRandomAction()
+        setStreamEntries((prevEntries) => [...prevEntries, newEntry].slice(-10))
+        setAnimatedData((prev) => ({
+          ...prev,
+          thoughts: prev.thoughts + (newEntry.type === undefined ? 1 : 0),
+          transactions: prev.transactions + (newEntry.type !== undefined ? 1 : 0)
+        }))
+        setIsThinking(false)
+      }, 1500)
+    }, 3000)
+
+    const dataInterval = setInterval(() => {
+      setAnimatedData((prev) => ({
+        earned: prev.earned + Math.random() * 10,
+        spent: prev.spent + Math.random() * 5,
+        nftsOwned: prev.nftsOwned + (Math.random() > 0.95 ? 1 : 0),
+        tokensOwned: prev.tokensOwned + (Math.random() > 0.98 ? 1 : 0),
+        transactions: prev.transactions,
+        thoughts: prev.thoughts
+      }))
+      setWalletBalance((prev) => prev + (Math.random() - 0.5) * 100)
+    }, 2000)
+
+    return () => {
+      clearInterval(cursorInterval)
+      clearInterval(streamInterval)
+      clearInterval(dataInterval)
+    }
+  }, [currentLang, generateRandomThought, generateRandomAction])
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      if (avatarRef.current) {
+        const avatarRect = avatarRef.current.getBoundingClientRect()
+        const avatarCenterX = avatarRect.left + avatarRect.width / 2
+        const avatarCenterY = avatarRect.top + avatarRect.height / 2
+
+        const dx = event.clientX - avatarCenterX
+        const dy = event.clientY - avatarCenterY
+        const maxDistance = Math.max(window.innerWidth, window.innerHeight) / 2
+
+        const normalizedX = Math.min(Math.max((dx / maxDistance) * 30 + 50, 20), 80)
+        const normalizedY = Math.min(Math.max((dy / maxDistance) * 30 + 50, 20), 80)
+
+        setEyePosition({ x: normalizedX, y: normalizedY })
+      }
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
+
+  useEffect(() => {
+    const dotsInterval = setInterval(() => {
+      setLoadingDots(prev => prev.length >= 3 ? '' : prev + '.')
+    }, 500)
+
+    return () => clearInterval(dotsInterval)
+  }, [])
+
+  useEffect(() => {
+    const dotInterval = setInterval(() => {
+      setIsLiveDotVisible(prev => !prev)
+    }, 1000)
+
+    return () => clearInterval(dotInterval)
+  }, [])
+
   const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setUserInput(e.target.value)
   }
@@ -233,7 +233,7 @@ export default function Component() {
   const getActionIcon = (type: ActionEntry['type']) => {
     switch (type) {
       case 'create_wallet': return <WalletSvg />
-      case 'request_faucet_funds': return <TokenSvg />
+      case 'request_faucet_funds': return <RequestSvg />
       case 'get_balance': return <WalletSvg />
       case 'swap_token': return <SwapSvg />
       case 'transfer_token': return <SendSvg />
