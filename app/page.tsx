@@ -7,6 +7,7 @@ import RequestSvg from '@/public/components/requestSvg'
 import SwapSvg from '@/public/components/swapSvg'
 import NftSvg from '@/public/components/nftSvg'
 import TokenSvg from '@/public/components/tokenSvg'
+import CopySvg from '@/public/components/copySvg'
 import dynamic from 'next/dynamic'
 
 
@@ -70,6 +71,7 @@ export default function Component() {
   const [isThinking, setIsThinking] = useState(true)
   const [loadingDots, setLoadingDots] = useState('')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [showToast, setShowToast] = useState(false)
 
   const agentName = "Based Agent"
   const agentWallet = "0x1234...5678"
@@ -225,7 +227,8 @@ export default function Component() {
   const copyToClipboard = () => {
     navigator.clipboard.writeText(agentWallet)
       .then(() => {
-        console.log('Wallet address copied to clipboard')
+        setShowToast(true)
+        setTimeout(() => setShowToast(false), 2000) // Hide toast after 2 seconds
       })
       .catch(err => {
         console.error('Failed to copy wallet address: ', err)
@@ -299,7 +302,7 @@ export default function Component() {
         </div>
         <div className="flex items-center space-x-2">
           <div className="h-2.5 w-2.5 rounded-full bg-green-400 animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.5)]"></div>
-          <span className="text-white text-sm">Live on Base Sepolia</span>
+          <span className="text-zinc-50 text-sm">Live on Base Sepolia</span>
         </div>
       </div>
 
@@ -320,7 +323,7 @@ export default function Component() {
           flex flex-col 
           overflow-y-auto
         `}>
-          <div className="mb-4 bg-black border border-[#5788FA] rounded-none">
+          <div className="mb-4 bg-black border border-[#5788FA] rounded-sm">
             <div className="flex flex-col items-start space-y-4 p-4">
  
               <svg
@@ -337,23 +340,26 @@ export default function Component() {
               </svg>
               <div className="space-y-2 text-left w-full">
                 <h2 className="text-xl font-bold text-[#5788FA]">{agentName}</h2>
-                <div className="flex items-center space-x-2 group">
-                  <span className="text-sm text-[#5788FA] truncate max-w-[120px]">{agentWallet}</span>
+                <div className="relative inline-flex items-center group">
                   <button 
-                    onClick={copyToClipboard} 
-                    className="opacity-0 group-hover:opacity-100 p-0 h-4 w-4 hover:bg-transparent transition-opacity focus:outline-none"
+                    onClick={copyToClipboard}
+                    className="text-sm text-[#5788FA] hover:text-[#3D7BFF] transition-colors"
                   >
-                    <WalletSvg />
-                    <span className="sr-only">Copy wallet address</span>
+                    {agentWallet}
                   </button>
+                  {showToast && (
+                    <div className="absolute top-full left-0 mt-2 bg-[#5788FA] text-black text-xs px-2 py-1 rounded-xs">
+                      Copied
+                    </div>
+                  )}
                 </div>
                 <p className="text-base text-[#5788FA]">{agentBio}</p>
               </div>
             </div>
           </div>
-          <div className="mb-4 bg-black border border-[#5788FA] rounded-none">
+          <div className="mb-4 bg-black border border-[#5788FA] rounded-sm">
             <div className="flex flex-col items-start p-4">
-              <span className="text-2xl font-bold text-[#5788FA] mt-1">
+              <span className="text-2xl font-bold text-[#5788FA]">
                 ${walletBalance.toFixed(2)}
               </span>
               <ul className="space-y-1 pt-4">
@@ -370,7 +376,7 @@ export default function Component() {
         {/* Right side - Stream and Chat */}
         <div className="flex-grow flex flex-col w-full lg:w-2/3">
           <div className="flex-grow p-4 pb-40 overflow-y-auto">
-            <p>Streaming real-time...</p>
+            <p className="text-zinc-600">Streaming real-time...</p>
             <div className="mt-4 space-y-2" role="log" aria-live="polite">
               {streamEntries.map((entry, index) => renderStreamEntry(entry, index))}
             </div>
@@ -389,22 +395,28 @@ export default function Component() {
                 onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
                 className="w-full h-24 lg:h-36 bg-black text-[#5788FA] p-4 pr-10 placeholder-[#5788FA] placeholder-opacity-50"
-                placeholder="What's on your mind?"
+                placeholder="How can I help?"
                 rows={1}
               />
               <div className="px-2 absolute bottom-0.5 right-0 flex items-center justify-between w-full -translate-y-1/2">
                 <div className="flex space-x-2 text-xs lg:text-sm ml-2 overflow-x-auto">
                   <button 
                     onClick={() => setUserInput("Send 5 USDC to jesse.base.eth")}
-                    className="text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1"
+                    className="text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1 rounded-sm"
                   >
                     Send 5 USDC to jesse.base.eth
                   </button>
                   <button 
                     onClick={() => setUserInput("Create a new wallet with 10 USDC")}
-                    className="text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1"
+                    className="text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1 rounded-sm"
                   >
                     Create a new wallet with 10 USDC
+                  </button>
+                  <button 
+                    onClick={() => setUserInput("Create a new wallet with 10 USDC")}
+                    className="text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1 rounded-sm"
+                  >
+                    What are my trading positions?
                   </button>
                 </div>
                 <button
