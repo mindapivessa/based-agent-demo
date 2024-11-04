@@ -7,7 +7,6 @@ import RequestSvg from '@/public/components/requestSvg'
 import SwapSvg from '@/public/components/swapSvg'
 import NftSvg from '@/public/components/nftSvg'
 import TokenSvg from '@/public/components/tokenSvg'
-import CopySvg from '@/public/components/copySvg'
 import dynamic from 'next/dynamic'
 
 
@@ -251,17 +250,17 @@ export default function Component() {
       const getIcon = () => {
         switch (entry.type) {
           case 'create_wallet':
-            return <WalletSvg />
+            return <div className="w-4 h-4"><WalletSvg /></div>
           case 'request_faucet_funds':
-            return <RequestSvg />
+            return <div className="w-4 h-4"><RequestSvg /></div>
           case 'get_balance':
-            return <WalletSvg />
+            return <div className="w-4 h-4"><WalletSvg /></div>
           case 'swap_token':
-            return <SwapSvg />
+            return <div className="w-4 h-4"><SwapSvg /></div>
           case 'transfer_nft':
-            return <NftSvg />
+            return <div className="w-4 h-4"><NftSvg /></div>
           case 'transfer_token':
-            return <TokenSvg />
+            return <div className="w-4 h-4"><TokenSvg /></div>
         }
       }
 
