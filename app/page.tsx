@@ -1,16 +1,16 @@
 'use client'
 
 import { useState, useEffect, useRef, ChangeEvent } from 'react'
-import WalletSvg from '@/public/components/walletSvg'
-import SendSvg from '@/public/components/sendSvg'
-import SwapSvg from '@/public/components/swapSvg'
-import NftSvg from '@/public/components/nftSvg'
-import TokenSvg from '@/public/components/tokenSvg'
-import LanguageSelector from '@/public/components/LanguageSelector'
+import WalletSvg from '@/app/components/walletSvg'
+import SendSvg from '@/app/components/sendSvg'
+import SwapSvg from '@/app/components/swapSvg'
+import NftSvg from '@/app/components/nftSvg'
+import TokenSvg from '@/app/components/tokenSvg'
+import LanguageSelector from '@/app/components/LanguageSelector'
 import { translations } from '@/app/translations'
 import { Noto_Sans_Thai } from 'next/font/google'
-import TimeDisplay from '@/public/components/TimeDisplay'
-import RequestSvg from '@/public/components/requestSvg'
+import TimeDisplay from '@/app/components/TimeDisplay'
+import RequestSvg from '@/app/components/requestSvg'
 
 const notoSansThai = Noto_Sans_Thai({
   weight: ['400', '700'],
