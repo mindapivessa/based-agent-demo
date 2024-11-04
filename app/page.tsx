@@ -68,57 +68,57 @@ export default function Component() {
   const agentName = "Based Agent"
   const agentWallet = "0x1234...5678"
 
-  const generateRandomThought = (): ThoughtEntry => {
-    const thoughts = [
-      translations[currentLang].thoughts.analyzing,
-      translations[currentLang].thoughts.processing,
-      translations[currentLang].thoughts.optimizing,
-      translations[currentLang].thoughts.generating,
-      translations[currentLang].thoughts.evaluating,
-      translations[currentLang].thoughts.simulating,
-    ]
-    return {
-      timestamp: new Date(),
-      content: thoughts[Math.floor(Math.random() * thoughts.length)]
-    }
-  }
-
-  const generateRandomAction = (): ActionEntry => {
-    const actions = [
-      { 
-        type: 'create_wallet' as const, 
-        content: `${translations[currentLang].actions.createWallet} 0x453b...3432` 
-      },
-      { 
-        type: 'request_faucet_funds' as const, 
-        content: translations[currentLang].actions.requestFunds 
-      },
-      { 
-        type: 'get_balance' as const, 
-        content: `0x4534...d342${translations[currentLang].actions.getBalance} 1003.45 USDC` 
-      },
-      { 
-        type: 'transfer_token' as const, 
-        content: `${translations[currentLang].actions.transferToken} 100 USDC ${translations[currentLang].actions.to} 0x1234...5678` 
-      },
-      { 
-        type: 'transfer_nft' as const, 
-        content: `${translations[currentLang].actions.transferNft} #1234 ${translations[currentLang].actions.to} 0x5678...9012` 
-      },
-      { 
-        type: 'swap_token' as const, 
-        content: `${translations[currentLang].actions.swapToken} 10 ETH ${translations[currentLang].actions.to} 15000 USDC` 
-      },
-    ]
-    const randomAction = actions[Math.floor(Math.random() * actions.length)]
-    return {
-      timestamp: new Date(),
-      type: randomAction.type,
-      content: randomAction.content
-    }
-  }
-
   useEffect(() => {
+    const generateRandomThought = (): ThoughtEntry => {
+      const thoughts = [
+        translations[currentLang].thoughts.analyzing,
+        translations[currentLang].thoughts.processing,
+        translations[currentLang].thoughts.optimizing,
+        translations[currentLang].thoughts.generating,
+        translations[currentLang].thoughts.evaluating,
+        translations[currentLang].thoughts.simulating,
+      ]
+      return {
+        timestamp: new Date(),
+        content: thoughts[Math.floor(Math.random() * thoughts.length)]
+      }
+    }
+
+    const generateRandomAction = (): ActionEntry => {
+      const actions = [
+        { 
+          type: 'create_wallet' as const, 
+          content: `${translations[currentLang].actions.createWallet} 0x453b...3432` 
+        },
+        { 
+          type: 'request_faucet_funds' as const, 
+          content: translations[currentLang].actions.requestFunds 
+        },
+        { 
+          type: 'get_balance' as const, 
+          content: `0x4534...d342${translations[currentLang].actions.getBalance} 1003.45 USDC` 
+        },
+        { 
+          type: 'transfer_token' as const, 
+          content: `${translations[currentLang].actions.transferToken} 100 USDC ${translations[currentLang].actions.to} 0x1234...5678` 
+        },
+        { 
+          type: 'transfer_nft' as const, 
+          content: `${translations[currentLang].actions.transferNft} #1234 ${translations[currentLang].actions.to} 0x5678...9012` 
+        },
+        { 
+          type: 'swap_token' as const, 
+          content: `${translations[currentLang].actions.swapToken} 10 ETH ${translations[currentLang].actions.to} 15000 USDC` 
+        },
+      ]
+      const randomAction = actions[Math.floor(Math.random() * actions.length)]
+      return {
+        timestamp: new Date(),
+        type: randomAction.type,
+        content: randomAction.content
+      }
+    }
+
     const cursorInterval = setInterval(() => {
       setCursorVisible((v) => !v)
     }, 530)
