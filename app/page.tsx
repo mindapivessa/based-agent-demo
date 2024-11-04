@@ -366,14 +366,14 @@ export default function Component() {
           <div className="mb-4 mr-2 bg-black border border-[#5788FA]/50 rounded-sm">
             <div className="flex flex-col items-start p-4">
               <span className="text-2xl font-bold text-[#5788FA]">
-                ${walletBalance.toFixed(2)}
+                {walletBalance.toFixed(2)} ETH
               </span>
               <ul className="space-y-1 pt-4">
                 <li className={currentLang === 'th' ? notoSansThai.className : ''}>
-                  {translations[currentLang].profile.stats.earned}: ${animatedData.earned.toFixed(2)}
+                  {translations[currentLang].profile.stats.earned}: {animatedData.earned.toFixed(2)} ETH
                 </li>
                 <li className={currentLang === 'th' ? notoSansThai.className : ''}>
-                  {translations[currentLang].profile.stats.spent}: ${animatedData.spent.toFixed(2)}
+                  {translations[currentLang].profile.stats.spent}: {animatedData.spent.toFixed(2)} ETH
                 </li>
                 <li className={currentLang === 'th' ? notoSansThai.className : ''}>
                   {translations[currentLang].profile.stats.nfts}: {animatedData.nftsOwned}
