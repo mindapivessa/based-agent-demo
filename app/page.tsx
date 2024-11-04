@@ -33,6 +33,7 @@ type AnimatedData = {
 }
 
 export default function Component() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cursorVisible, setCursorVisible] = useState(true)
   const [currentTime, setCurrentTime] = useState(() => new Date())
   const [streamEntries, setStreamEntries] = useState<StreamEntry[]>([])
@@ -48,6 +49,8 @@ export default function Component() {
   const [eyePosition, setEyePosition] = useState({ x: 50, y: 50 })
   const avatarRef = useRef<SVGSVGElement>(null)
   const [walletBalance, setWalletBalance] = useState(5000) // Initial wallet balance
+  const [isThinking, setIsThinking] = useState(true)
+  const [loadingDots, setLoadingDots] = useState('')
 
   const agentName = "Based Agent"
   const agentWallet = "0x1234...5678"
@@ -65,13 +68,17 @@ export default function Component() {
     }, 1000)
 
     const streamInterval = setInterval(() => {
-      const newEntry = Math.random() > 0.3 ? generateRandomThought() : generateRandomAction()
-      setStreamEntries((prevEntries) => [...prevEntries, newEntry].slice(-10))
-      setAnimatedData((prev) => ({
-        ...prev,
-        thoughts: prev.thoughts + (newEntry.type === undefined ? 1 : 0),
-        transactions: prev.transactions + (newEntry.type !== undefined ? 1 : 0)
-      }))
+      setIsThinking(true)
+      setTimeout(() => {
+        const newEntry = Math.random() > 0.3 ? generateRandomThought() : generateRandomAction()
+        setStreamEntries((prevEntries) => [...prevEntries, newEntry].slice(-10))
+        setAnimatedData((prev) => ({
+          ...prev,
+          thoughts: prev.thoughts + (newEntry.type === undefined ? 1 : 0),
+          transactions: prev.transactions + (newEntry.type !== undefined ? 1 : 0)
+        }))
+        setIsThinking(false)
+      }, 1500) // Delay to show thinking state
     }, 3000)
 
     const dataInterval = setInterval(() => {
@@ -115,6 +122,14 @@ export default function Component() {
 
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
+
+  useEffect(() => {
+    const dotsInterval = setInterval(() => {
+      setLoadingDots(prev => prev.length >= 3 ? '' : prev + '.')
+    }, 500)
+
+    return () => clearInterval(dotsInterval)
   }, [])
 
   const formatThailandDate = (date: Date) => {
@@ -305,7 +320,7 @@ export default function Component() {
           </div>
           <div className="mb-4 bg-black border border-[#5788FA] rounded-none">
             <div className="flex flex-col items-start p-4">
-              <span className="text-2xl font-bold text-[#5788FA] mt-2">
+              <span className="text-2xl font-bold text-[#5788FA] mt-1">
                 ${walletBalance.toFixed(2)}
               </span>
               <ul className="space-y-1 pt-4">
@@ -326,35 +341,44 @@ export default function Component() {
             <div className="mt-4 space-y-2" role="log" aria-live="polite">
               {streamEntries.map((entry, index) => renderStreamEntry(entry, index))}
             </div>
-            <div className="flex items-center mt-4">
-              <span className="mr-2">$</span>
-              <span className="relative">
-                <span className="invisible">_</span>
-                <span
-                  className={`absolute left-0 top-0 h-5 w-2 bg-[#5788FA] ${
-                    cursorVisible ? 'opacity-100' : 'opacity-0'
-                  }`}
-                  aria-hidden="true"
-                ></span>
-              </span>
-            </div>
+            {isThinking && (
+              <div className="flex items-center mt-4 text-[#5788FA] opacity-70">
+                <span className="font-mono">Agent is thinking{loadingDots}</span>
+              </div>
+            )}
           </div>
-          <form onSubmit={handleSubmit} className="p-4 border-t border-[#5788FA]">
+          <form onSubmit={handleSubmit} className="border-t border-[#5788FA] fixed bottom-0 right-0 w-2/3">
             <div className="relative">
               <textarea
                 value={userInput}
                 onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
-                className="w-full h-20 bg-black border border-[#5788FA] text-[#5788FA] p-2 pr-10 placeholder-[#5788FA] placeholder-opacity-50"
+                className="w-full h-36 bg-black text-[#5788FA] p-4 pr-10 placeholder-[#5788FA] placeholder-opacity-50"
                 placeholder="What's on your mind?"
                 rows={1}
               />
-              <button
-                type="submit"
-                className="absolute bottom-1 right-2 -translate-y-1/2 bg-[#5788FA] text-black p-1.5 hover:bg-[#3D7BFF] transition-colors rounded-sm"
-              >
-                <SendSvg />
-              </button>
+              <div className="px-2 absolute bottom-0.5 right-0 flex items-center justify-between w-full -translate-y-1/2">
+                <div className="flex space-x-2 text-sm ml-2">
+                  <button 
+                    onClick={() => setUserInput("Send 5 USDC to jesse.base.eth")}
+                    className="text-[#5788FA] hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1"
+                  >
+                    Send 5 USDC to jesse.base.eth
+                  </button>
+                  <button 
+                    onClick={() => setUserInput("Create a new wallet with 10 USDC")}
+                    className="text-[#5788FA] hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1"
+                  >
+                    Create a new wallet with 10 USDC
+                  </button>
+                </div>
+                <button
+                  type="submit"
+                  className="bg-[#5788FA] text-black p-1.5 hover:bg-[#3D7BFF] transition-colors rounded-sm"
+                >
+                  <SendSvg />
+                </button>
+              </div>
             </div>
           </form>
         </div>
