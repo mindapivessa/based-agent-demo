@@ -68,7 +68,7 @@ export const translations = {
       suggestions: {
         send: 'ส่ง 5 USDC ไปที่ jesse.base.eth',
         create: 'สร้างกระเป๋าเงินใหม่พร้อม 10 USDC',
-        positions: 'ตำแหน่งการเทรดของฉันคืออะไร?'
+        swap: 'ตำแหน่งการเทรดของฉันคืออะไร?'
       }
     },
     actions: {
@@ -113,7 +113,7 @@ export const translations = {
       suggestions: {
         send: '发送 5 USDC 到 jesse.base.eth',
         create: '创建新钱包并存入 10 USDC',
-        positions: '我的交易持仓是什么？'
+        swap: '我的交易持仓是什么？'
       }
     },
     actions: {

@@ -449,7 +449,12 @@ export default function Component() {
                 </div>
                 <button
                   type="submit"
-                  className="bg-[#5788FA] text-zinc-950 p-1.5 hover:bg-[#3D7BFF] transition-colors rounded-sm"
+                  disabled={!/[a-zA-Z]/.test(userInput)}
+                  className={`p-1.5 rounded-sm transition-colors ${
+                    /[a-zA-Z]/.test(userInput)
+                      ? 'bg-[#5788FA] text-zinc-950 hover:bg-[#3D7BFF]' 
+                      : 'bg-[#5788FA] text-zinc-950 opacity-50 cursor-not-allowed'
+                  }`}
                 >
                   <SendSvg />
                 </button>
