@@ -297,7 +297,7 @@ export default function Component() {
     <div className="flex flex-col h-screen bg-black font-mono text-[#5788FA] relative overflow-hidden">
       {/* Header */}
       <div className="p-4 flex items-center justify-between border-b border-[#5788FA] relative z-10">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center">
           <button 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="lg:hidden text-[#5788FA] p-2"
@@ -338,43 +338,50 @@ export default function Component() {
           flex flex-col 
           overflow-y-auto
         `}>
-          <div className="mb-4 bg-black border border-[#5788FA] rounded-sm">
-            <div className="flex flex-col items-start space-y-4 p-4">
- 
-              <svg
-                ref={avatarRef}
-                width="80"
-                height="80"
-                viewBox="0 0 100 100"
-                className="bg-[#5788FA]"
-                role="img"
-                aria-label="Animated avatar"
-              >
-                <circle cx="50" cy="50" r="45" fill="#000000" />
-                <circle cx={eyePosition.x} cy={eyePosition.y} r="5" fill="#5788FA" />
-              </svg>
-              <div className="space-y-2 text-left w-full">
-                <h2 className="text-xl font-bold text-[#5788FA]">{agentName}</h2>
-                <div className="relative inline-flex items-center group">
-                  <button 
-                    onClick={copyToClipboard}
-                    className="text-sm text-[#5788FA] hover:text-[#3D7BFF] transition-colors"
-                  >
-                    {agentWallet}
-                  </button>
-                  {showToast && (
-                    <div className="absolute top-full left-0 mt-2 bg-[#5788FA] text-black text-xs px-2 py-1 rounded-xs">
-                      Copied
-                    </div>
-                  )}
+          <div className="mb-4">
+            <div className="flex flex-col space-y-4 py-2">
+              {/* Avatar and Identity Info */}
+              <div className="flex items-center space-x-6">
+                {/* Avatar */}
+                <svg
+                  ref={avatarRef}
+                  width="80"
+                  height="80"
+                  viewBox="0 0 100 100"
+                  className="bg-[#5788FA]"
+                  role="img"
+                  aria-label="Animated avatar"
+                >
+                  <circle cx="50" cy="50" r="45" fill="#000000" />
+                  <circle cx={eyePosition.x} cy={eyePosition.y} r="5" fill="#5788FA" />
+                </svg>
+
+                {/* Name and Address */}
+                <div className="flex flex-col justify-center space-y-2">
+                  <h2 className="text-xl font-bold text-[#5788FA]">{agentName}</h2>
+                  <div className="relative inline-flex items-center group">
+                    <button 
+                      onClick={copyToClipboard}
+                      className="text-sm text-[#5788FA] hover:text-[#3D7BFF] transition-colors"
+                    >
+                      {agentWallet}
+                    </button>
+                    {showToast && (
+                      <div className="absolute top-full left-0 mt-2 bg-[#5788FA] text-black text-xs px-2 py-1 rounded-xs">
+                        Copied
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <p className={`text-base text-[#5788FA] ${currentLang === 'th' ? notoSansThai.className : ''}`}>
-                  {translations[currentLang].profile.bio}
-                </p>
               </div>
+
+              {/* Bio */}
+              <p className={`text-base text-[#5788FA] ${currentLang === 'th' ? notoSansThai.className : ''}`}>
+                {translations[currentLang].profile.bio}
+              </p>
             </div>
           </div>
-          <div className="mb-4 bg-black border border-[#5788FA] rounded-sm">
+          <div className="mb-4 mr-2 bg-black border border-[#5788FA] rounded-sm">
             <div className="flex flex-col items-start p-4">
               <span className="text-2xl font-bold text-[#5788FA]">
                 ${walletBalance.toFixed(2)}
