@@ -390,6 +390,8 @@ export default function Component() {
         </div>
 
         {/* Right side - Stream and Chat */}
+        {/* TODO: Link each onchain transaction out to Basescan */}
+        {/* TODO: Decide if we want to include dummy data for thoughts. If so, replace thoughts with different copies */}
         <div className="flex-grow flex flex-col w-full lg:w-2/3">
           <div className="flex-grow p-4 pb-40 overflow-y-auto">
             <p className={`text-zinc-500 ${currentLang === 'th' ? notoSansThai.className : ''}`}>
