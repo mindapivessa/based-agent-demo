@@ -13,7 +13,7 @@ export default function LanguageSelector({ currentLang, onLanguageChange }: Lang
   ] as const
 
   return (
-    <div className="inline-flex border border-[#5788FA] rounded-sm overflow-hidden">
+    <div className="inline-flex border border-[#5788FA]/50 rounded-sm overflow-hidden">
       {languages.map(({ code, label }) => (
         <button
           key={code}
@@ -25,7 +25,7 @@ export default function LanguageSelector({ currentLang, onLanguageChange }: Lang
               ? 'bg-[#5788FA] text-zinc-950 hover:bg-[#3D7BFF]' 
               : 'hover:bg-zinc-900 hover:text-[#3D7BFF]'
             }
-            ${code !== 'en' && 'border-l border-[#5788FA]'}
+            ${code !== 'en' && 'border-l border-[#5788FA]/50'}
           `}
         >
           {label}

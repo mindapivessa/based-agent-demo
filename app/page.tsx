@@ -277,8 +277,7 @@ export default function Component() {
 
   return (
     <div className="flex flex-col h-screen bg-black font-mono text-[#5788FA] relative overflow-hidden">
-      {/* Header with smoother animated dot */}
-      <div className="flex justify-between items-center p-4 border-b border-[#5788FA]">
+      <div className="flex justify-between items-center p-2 border-b border-[#5788FA]/50">
         <div className="flex items-center space-x-2">
           {/* Mobile menu button */}
           <button 
@@ -317,19 +316,19 @@ export default function Component() {
           z-20 lg:z-0
           transition-transform
           duration-300
-          p-4 lg:border-r lg:border-[#5788FA] 
+          p-2 lg:border-r lg:border-[#5788FA]/50 
           flex flex-col 
           overflow-y-auto
         `}>
           <div className="mb-4">
             <div className="flex flex-col space-y-4 py-2">
               {/* Avatar and Identity Info */}
-              <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-5">
                 {/* Avatar */}
                 <svg
                   ref={avatarRef}
-                  width="80"
-                  height="80"
+                  width="70"
+                  height="70"
                   viewBox="0 0 100 100"
                   className="bg-[#5788FA]"
                   role="img"
@@ -364,7 +363,7 @@ export default function Component() {
               </p>
             </div>
           </div>
-          <div className="mb-4 mr-2 bg-black border border-[#5788FA] rounded-sm">
+          <div className="mb-4 mr-2 bg-black border border-[#5788FA]/50 rounded-sm">
             <div className="flex flex-col items-start p-4">
               <span className="text-2xl font-bold text-[#5788FA]">
                 ${walletBalance.toFixed(2)}
@@ -393,7 +392,7 @@ export default function Component() {
         {/* Right side - Stream and Chat */}
         <div className="flex-grow flex flex-col w-full lg:w-2/3">
           <div className="flex-grow p-4 pb-40 overflow-y-auto">
-            <p className={`text-zinc-600 ${currentLang === 'th' ? notoSansThai.className : ''}`}>
+            <p className={`text-zinc-500 ${currentLang === 'th' ? notoSansThai.className : ''}`}>
               {translations[currentLang].stream.realTime}
             </p>
             <div className="mt-4 space-y-2" role="log" aria-live="polite">
@@ -409,7 +408,7 @@ export default function Component() {
           </div>
           
           {/* Chat Input */}
-          <form onSubmit={handleSubmit} className="fixed bottom-0 right-0 w-full lg:w-2/3 border-t border-[#5788FA] bg-black">
+          <form onSubmit={handleSubmit} className="fixed bottom-0 right-0 w-full lg:w-2/3 border-t border-[#5788FA]/50 bg-black">
             <div className="relative">
               <textarea
                 value={userInput}
@@ -425,7 +424,7 @@ export default function Component() {
                 <div className="flex space-x-2 text-xs lg:text-sm ml-2 overflow-x-auto">
                   <button 
                     onClick={() => setUserInput(translations[currentLang].chat.suggestions.send)}
-                    className={`text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1 rounded-sm ${
+                    className={`text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA]/50 px-2 py-1 rounded-sm ${
                       currentLang === 'th' ? notoSansThai.className : ''
                     }`}
                   >
@@ -433,7 +432,7 @@ export default function Component() {
                   </button>
                   <button 
                     onClick={() => setUserInput(translations[currentLang].chat.suggestions.create)}
-                    className={`text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1 rounded-sm ${
+                    className={`text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA]/50 px-2 py-1 rounded-sm ${
                       currentLang === 'th' ? notoSansThai.className : ''
                     }`}
                   >
@@ -441,7 +440,7 @@ export default function Component() {
                   </button>
                   <button 
                     onClick={() => setUserInput(translations[currentLang].chat.suggestions.positions)}
-                    className={`text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1 rounded-sm ${
+                    className={`text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA]/50 px-2 py-1 rounded-sm ${
                       currentLang === 'th' ? notoSansThai.className : ''
                     }`}
                   >
@@ -458,6 +457,12 @@ export default function Component() {
             </div>
           </form>
         </div>
+      </div>
+      <div className="fixed bottom-4 left-4 text-zinc-400 text-sm z-30">
+        Powered by <a href="https://onchainkit.xyz/" target="_blank" rel="noopener noreferrer" className="font-bold hover:text-zinc-300 transition-colors">OnchainKit</a>
+        <span className="mx-2">·</span>
+        {/* TODO: Replace with a link to the template repo */}
+        <a href="https://github.com/coinbase/onchainkit" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-300 transition-colors">Fork this template</a>
       </div>
     </div>
   )
