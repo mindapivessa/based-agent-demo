@@ -7,8 +7,15 @@ import RequestSvg from '@/public/components/requestSvg'
 import SwapSvg from '@/public/components/swapSvg'
 import NftSvg from '@/public/components/nftSvg'
 import TokenSvg from '@/public/components/tokenSvg'
-import dynamic from 'next/dynamic'
+import LanguageSelector from '@/public/components/LanguageSelector'
+import { translations } from '@/app/translations'
+import TimeDisplay from '@/public/components/TimeDisplay'
+import { Noto_Sans_Thai } from 'next/font/google'
 
+const notoSansThai = Noto_Sans_Thai({
+  weight: ['400', '700'],
+  subsets: ['thai'],
+})
 
 type ThoughtEntry = {
   timestamp: Date
@@ -33,22 +40,7 @@ type AnimatedData = {
   thoughts: number
 }
 
-// Create a client-only time component
-const TimeDisplay = dynamic(() => Promise.resolve(({ currentTime }: { currentTime: Date }) => (
-  <div className="text-sm" aria-live="polite">
-    {currentTime.toLocaleString('en-US', { 
-      timeZone: 'Asia/Bangkok',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-      formatMatcher: 'basic'
-    }).replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$1-$2')} ICT
-  </div>
-)), { ssr: false })
+type Language = 'en' | 'th' | 'zh'
 
 export default function Component() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -71,10 +63,10 @@ export default function Component() {
   const [loadingDots, setLoadingDots] = useState('')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [showToast, setShowToast] = useState(false)
+  const [currentLang, setCurrentLang] = useState<Language>('en')
 
   const agentName = "Based Agent"
   const agentWallet = "0x1234...5678"
-  const agentBio = "I exist to make the Internet fun again."
 
   useEffect(() => {
     setCurrentTime(new Date())
@@ -98,7 +90,7 @@ export default function Component() {
           transactions: prev.transactions + (newEntry.type !== undefined ? 1 : 0)
         }))
         setIsThinking(false)
-      }, 1500) // Delay to show thinking state
+      }, 1500)
     }, 3000)
 
     const dataInterval = setInterval(() => {
@@ -110,7 +102,6 @@ export default function Component() {
         transactions: prev.transactions,
         thoughts: prev.thoughts
       }))
-      // Update wallet balance
       setWalletBalance((prev) => prev + (Math.random() - 0.5) * 100)
     }, 2000)
 
@@ -120,7 +111,7 @@ export default function Component() {
       clearInterval(streamInterval)
       clearInterval(dataInterval)
     }
-  }, [])
+  }, [currentLang])
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
@@ -168,12 +159,12 @@ export default function Component() {
 
   const generateRandomThought = (): ThoughtEntry => {
     const thoughts = [
-      "Analyzing data patterns...",
-      "Processing natural language input...",
-      "Optimizing neural networks...",
-      "Generating creative solutions...",
-      "Evaluating ethical implications...",
-      "Simulating complex scenarios...",
+      translations[currentLang].thoughts.analyzing,
+      translations[currentLang].thoughts.processing,
+      translations[currentLang].thoughts.optimizing,
+      translations[currentLang].thoughts.generating,
+      translations[currentLang].thoughts.evaluating,
+      translations[currentLang].thoughts.simulating,
     ]
     return {
       timestamp: new Date(),
@@ -183,13 +174,31 @@ export default function Component() {
 
   const generateRandomAction = (): ActionEntry => {
     const actions = [
-      { type: 'create_wallet', content: 'Created a new wallet 0x453b...3432' },
-      { type: 'request_faucet_funds', content: 'Requested and received 0.01 ETH from the faucet' },
-      { type: 'get_balance', content: '0x4534...d342\'s balance is 1003.45 USDC' },
-      { type: 'transfer_token', content: 'Transferred 100 USDC to 0x1234...5678' },
-      { type: 'transfer_nft', content: 'Transferred NFT #1234 to 0x5678...9012' },
-      { type: 'swap_token', content: 'Swapped 10 ETH for 15000 USDC' },
-    ] as const
+      { 
+        type: 'create_wallet' as const, 
+        content: `${translations[currentLang].actions.createWallet} 0x453b...3432` 
+      },
+      { 
+        type: 'request_faucet_funds' as const, 
+        content: translations[currentLang].actions.requestFunds 
+      },
+      { 
+        type: 'get_balance' as const, 
+        content: `0x4534...d342${translations[currentLang].actions.getBalance} 1003.45 USDC` 
+      },
+      { 
+        type: 'transfer_token' as const, 
+        content: `${translations[currentLang].actions.transferToken} 100 USDC ${translations[currentLang].actions.to} 0x1234...5678` 
+      },
+      { 
+        type: 'transfer_nft' as const, 
+        content: `${translations[currentLang].actions.transferNft} #1234 ${translations[currentLang].actions.to} 0x5678...9012` 
+      },
+      { 
+        type: 'swap_token' as const, 
+        content: `${translations[currentLang].actions.swapToken} 10 ETH ${translations[currentLang].actions.to} 15000 USDC` 
+      },
+    ]
     const randomAction = actions[Math.floor(Math.random() * actions.length)]
     return {
       timestamp: new Date(),
@@ -239,7 +248,9 @@ export default function Component() {
       if (entry.type === 'user') {
         return (
           <div key={index} className="mb-2 flex flex-col items-end">
-            <div className="text-xs text-gray-500">You at {formatThailandDate(entry.timestamp)}</div>
+            <div className="text-xs text-gray-500">
+              {translations[currentLang].stream.youAt} {formatThailandDate(entry.timestamp)}
+            </div>
             <div className="text-[#5788FA] max-w-[80%]">
               {entry.content}
             </div>
@@ -284,8 +295,13 @@ export default function Component() {
     }
   }
 
+  useEffect(() => {
+    // Clear stream entries when language changes
+    setStreamEntries([])
+  }, [currentLang])
+
   return (
-    <div className="flex flex-col h-screen bg-black font-mono text-[#5788FA] relative overflow-hidden">
+    <div className={`flex flex-col h-screen bg-black font-mono text-[#5788FA] relative overflow-hidden ${currentLang === 'th' ? notoSansThai.className : ''}`}>
       {/* Header */}
       <div className="p-4 flex items-center justify-between border-b border-[#5788FA] relative z-10">
         <div className="flex items-center space-x-4">
@@ -299,9 +315,17 @@ export default function Component() {
           </button>
           <TimeDisplay currentTime={currentTime} />
         </div>
-        <div className="flex items-center space-x-2">
-          <div className="h-2.5 w-2.5 rounded-full bg-green-400 animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.5)]"></div>
-          <span className="text-zinc-50 text-sm">Live on Base Sepolia</span>
+        <div className="flex items-center space-x-4">
+          <LanguageSelector 
+            currentLang={currentLang}
+            onLanguageChange={setCurrentLang}
+          />
+          <div className="flex items-center space-x-2">
+            <div className="h-2.5 w-2.5 rounded-full bg-green-400 animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.5)]"></div>
+            <span className="text-zinc-50 text-sm">
+              {translations[currentLang].header.liveOn}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -352,7 +376,7 @@ export default function Component() {
                     </div>
                   )}
                 </div>
-                <p className="text-base text-[#5788FA]">{agentBio}</p>
+                <p className="text-base text-[#5788FA]">{translations[currentLang].profile.bio}</p>
               </div>
             </div>
           </div>
@@ -362,11 +386,11 @@ export default function Component() {
                 ${walletBalance.toFixed(2)}
               </span>
               <ul className="space-y-1 pt-4">
-                <li>Earned: ${animatedData.earned.toFixed(2)}</li>
-                <li>Spent: ${animatedData.spent.toFixed(2)}</li>
-                <li>NFTs: {animatedData.nftsOwned}</li>
-                <li>Tokens: {animatedData.tokensOwned}</li>
-                <li>Transactions: {animatedData.transactions}</li>
+                <li>{translations[currentLang].profile.stats.earned}: ${animatedData.earned.toFixed(2)}</li>
+                <li>{translations[currentLang].profile.stats.spent}: ${animatedData.spent.toFixed(2)}</li>
+                <li>{translations[currentLang].profile.stats.nfts}: {animatedData.nftsOwned}</li>
+                <li>{translations[currentLang].profile.stats.tokens}: {animatedData.tokensOwned}</li>
+                <li>{translations[currentLang].profile.stats.transactions}: {animatedData.transactions}</li>
               </ul>
             </div>
           </div>
@@ -375,13 +399,13 @@ export default function Component() {
         {/* Right side - Stream and Chat */}
         <div className="flex-grow flex flex-col w-full lg:w-2/3">
           <div className="flex-grow p-4 pb-40 overflow-y-auto">
-            <p className="text-zinc-600">Streaming real-time...</p>
+            <p className="text-zinc-600">{translations[currentLang].stream.realTime}</p>
             <div className="mt-4 space-y-2" role="log" aria-live="polite">
               {streamEntries.map((entry, index) => renderStreamEntry(entry, index))}
             </div>
             {isThinking && (
               <div className="flex items-center mt-4 text-[#5788FA] opacity-70">
-                <span className="font-mono">Agent is thinking{loadingDots}</span>
+                <span className="font-mono">{translations[currentLang].stream.thinking}{loadingDots}</span>
               </div>
             )}
           </div>
@@ -394,28 +418,28 @@ export default function Component() {
                 onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
                 className="w-full h-24 lg:h-36 bg-black text-[#5788FA] p-4 pr-10 placeholder-[#5788FA] placeholder-opacity-50"
-                placeholder="How can I help?"
+                placeholder={translations[currentLang].chat.placeholder}
                 rows={1}
               />
               <div className="px-2 absolute bottom-0.5 right-0 flex items-center justify-between w-full -translate-y-1/2">
                 <div className="flex space-x-2 text-xs lg:text-sm ml-2 overflow-x-auto">
                   <button 
-                    onClick={() => setUserInput("Send 5 USDC to jesse.base.eth")}
+                    onClick={() => setUserInput(translations[currentLang].chat.suggestions.send)}
                     className="text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1 rounded-sm"
                   >
-                    Send 5 USDC to jesse.base.eth
+                    {translations[currentLang].chat.suggestions.send}
                   </button>
                   <button 
-                    onClick={() => setUserInput("Create a new wallet with 10 USDC")}
+                    onClick={() => setUserInput(translations[currentLang].chat.suggestions.create)}
                     className="text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1 rounded-sm"
                   >
-                    Create a new wallet with 10 USDC
+                    {translations[currentLang].chat.suggestions.create}
                   </button>
                   <button 
-                    onClick={() => setUserInput("Create a new wallet with 10 USDC")}
+                    onClick={() => setUserInput(translations[currentLang].chat.suggestions.positions)}
                     className="text-[#5788FA] whitespace-nowrap hover:text-[#3D7BFF] hover:bg-zinc-900 transition-colors border border-[#5788FA] px-2 py-1 rounded-sm"
                   >
-                    What are my trading positions?
+                    {translations[currentLang].chat.suggestions.positions}
                   </button>
                 </div>
                 <button
