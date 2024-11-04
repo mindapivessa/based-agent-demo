@@ -9,7 +9,6 @@ import NftSvg from '@/public/components/nftSvg'
 import TokenSvg from '@/public/components/tokenSvg'
 import LanguageSelector from '@/public/components/LanguageSelector'
 import { translations } from '@/app/translations'
-import TimeDisplay from '@/public/components/TimeDisplay'
 import { Noto_Sans_Thai } from 'next/font/google'
 
 const notoSansThai = Noto_Sans_Thai({
@@ -45,7 +44,6 @@ type Language = 'en' | 'th' | 'zh'
 export default function Component() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cursorVisible, setCursorVisible] = useState(true)
-  const [currentTime, setCurrentTime] = useState(() => new Date())
   const [streamEntries, setStreamEntries] = useState<StreamEntry[]>([])
   const [userInput, setUserInput] = useState('')
   const [animatedData, setAnimatedData] = useState<AnimatedData>({
@@ -69,15 +67,9 @@ export default function Component() {
   const agentWallet = "0x1234...5678"
 
   useEffect(() => {
-    setCurrentTime(new Date())
-
     const cursorInterval = setInterval(() => {
       setCursorVisible((v) => !v)
     }, 530)
-
-    const timeInterval = setInterval(() => {
-      setCurrentTime(new Date())
-    }, 1000)
 
     const streamInterval = setInterval(() => {
       setIsThinking(true)
@@ -107,7 +99,6 @@ export default function Component() {
 
     return () => {
       clearInterval(cursorInterval)
-      clearInterval(timeInterval)
       clearInterval(streamInterval)
       clearInterval(dataInterval)
     }
@@ -304,7 +295,7 @@ export default function Component() {
     <div className={`flex flex-col h-screen bg-black font-mono text-[#5788FA] relative overflow-hidden ${currentLang === 'th' ? notoSansThai.className : ''}`}>
       {/* Header */}
       <div className="p-4 flex items-center justify-between border-b border-[#5788FA] relative z-10">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center">
           <button 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="lg:hidden text-[#5788FA] p-2"
@@ -313,19 +304,18 @@ export default function Component() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>
             </svg>
           </button>
-          <TimeDisplay currentTime={currentTime} />
-        </div>
-        <div className="flex items-center space-x-4">
-          <LanguageSelector 
-            currentLang={currentLang}
-            onLanguageChange={setCurrentLang}
-          />
           <div className="flex items-center space-x-2">
             <div className="h-2.5 w-2.5 rounded-full bg-green-400 animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.5)]"></div>
             <span className="text-zinc-50 text-sm">
               {translations[currentLang].header.liveOn}
             </span>
           </div>
+        </div>
+        <div className="flex items-center">
+          <LanguageSelector 
+            currentLang={currentLang}
+            onLanguageChange={setCurrentLang}
+          />
         </div>
       </div>
 
