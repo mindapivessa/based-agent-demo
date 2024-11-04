@@ -239,10 +239,10 @@ export default function Component() {
       if (entry.type === 'user') {
         return (
           <div key={index} className="mb-2 flex flex-col items-end">
-            <div className="text-xs text-gray-500">
+            <div className={`text-xs text-gray-500 ${currentLang === 'th' ? notoSansThai.className : ''}`}>
               {translations[currentLang].stream.youAt} {formatThailandDate(entry.timestamp)}
             </div>
-            <div className="text-[#5788FA] max-w-[80%]">
+            <div className={`text-[#5788FA] max-w-[80%] ${currentLang === 'th' ? notoSansThai.className : ''}`}>
               {entry.content}
             </div>
           </div>
@@ -269,7 +269,7 @@ export default function Component() {
       return (
         <div key={index} className="mb-2">
           <div className="text-xs text-gray-500">{formatThailandDate(entry.timestamp)}</div>
-          <div className="flex items-center">
+          <div className={`flex items-center ${currentLang === 'th' ? notoSansThai.className : ''}`}>
             {getIcon()}
             <span className="pl-2">{entry.content}</span>
           </div>
@@ -280,7 +280,9 @@ export default function Component() {
       return (
         <div key={index} className="mb-2">
           <div className="text-xs text-gray-500">{formatThailandDate(entry.timestamp)}</div>
-          <div className="text-gray-300">{entry.content}</div>
+          <div className={`text-gray-300 ${currentLang === 'th' ? notoSansThai.className : ''}`}>
+            {entry.content}
+          </div>
         </div>
       )
     }
@@ -292,10 +294,10 @@ export default function Component() {
   }, [currentLang])
 
   return (
-    <div className={`flex flex-col h-screen bg-black font-mono text-[#5788FA] relative overflow-hidden ${currentLang === 'th' ? notoSansThai.className : ''}`}>
+    <div className="flex flex-col h-screen bg-black font-mono text-[#5788FA] relative overflow-hidden">
       {/* Header */}
       <div className="p-4 flex items-center justify-between border-b border-[#5788FA] relative z-10">
-        <div className="flex items-center">
+        <div className="flex items-center space-x-4">
           <button 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="lg:hidden text-[#5788FA] p-2"
@@ -366,7 +368,9 @@ export default function Component() {
                     </div>
                   )}
                 </div>
-                <p className="text-base text-[#5788FA]">{translations[currentLang].profile.bio}</p>
+                <p className={`text-base text-[#5788FA] ${currentLang === 'th' ? notoSansThai.className : ''}`}>
+                  {translations[currentLang].profile.bio}
+                </p>
               </div>
             </div>
           </div>
@@ -376,11 +380,21 @@ export default function Component() {
                 ${walletBalance.toFixed(2)}
               </span>
               <ul className="space-y-1 pt-4">
-                <li>{translations[currentLang].profile.stats.earned}: ${animatedData.earned.toFixed(2)}</li>
-                <li>{translations[currentLang].profile.stats.spent}: ${animatedData.spent.toFixed(2)}</li>
-                <li>{translations[currentLang].profile.stats.nfts}: {animatedData.nftsOwned}</li>
-                <li>{translations[currentLang].profile.stats.tokens}: {animatedData.tokensOwned}</li>
-                <li>{translations[currentLang].profile.stats.transactions}: {animatedData.transactions}</li>
+                <li className={currentLang === 'th' ? notoSansThai.className : ''}>
+                  {translations[currentLang].profile.stats.earned}: ${animatedData.earned.toFixed(2)}
+                </li>
+                <li className={currentLang === 'th' ? notoSansThai.className : ''}>
+                  {translations[currentLang].profile.stats.spent}: ${animatedData.spent.toFixed(2)}
+                </li>
+                <li className={currentLang === 'th' ? notoSansThai.className : ''}>
+                  {translations[currentLang].profile.stats.nfts}: {animatedData.nftsOwned}
+                </li>
+                <li className={currentLang === 'th' ? notoSansThai.className : ''}>
+                  {translations[currentLang].profile.stats.tokens}: {animatedData.tokensOwned}
+                </li>
+                <li className={currentLang === 'th' ? notoSansThai.className : ''}>
+                  {translations[currentLang].profile.stats.transactions}: {animatedData.transactions}
+                </li>
               </ul>
             </div>
           </div>
@@ -389,13 +403,17 @@ export default function Component() {
         {/* Right side - Stream and Chat */}
         <div className="flex-grow flex flex-col w-full lg:w-2/3">
           <div className="flex-grow p-4 pb-40 overflow-y-auto">
-            <p className="text-zinc-600">{translations[currentLang].stream.realTime}</p>
+            <p className={`text-zinc-600 ${currentLang === 'th' ? notoSansThai.className : ''}`}>
+              {translations[currentLang].stream.realTime}
+            </p>
             <div className="mt-4 space-y-2" role="log" aria-live="polite">
               {streamEntries.map((entry, index) => renderStreamEntry(entry, index))}
             </div>
             {isThinking && (
               <div className="flex items-center mt-4 text-[#5788FA] opacity-70">
-                <span className="font-mono">{translations[currentLang].stream.thinking}{loadingDots}</span>
+                <span className={`font-mono ${currentLang === 'th' ? notoSansThai.className : ''}`}>
+                  {translations[currentLang].stream.thinking}{loadingDots}
+                </span>
               </div>
             )}
           </div>
