@@ -13,13 +13,14 @@ export default function LanguageSelector({ currentLang, onLanguageChange }: Lang
   ] as const
 
   return (
-    <div className="flex border border-[#5788FA] rounded-sm overflow-hidden">
+    <div className="inline-flex border border-[#5788FA] rounded-sm overflow-hidden">
       {languages.map(({ code, label }) => (
         <button
           key={code}
           onClick={() => onLanguageChange(code)}
+          style={{ width: '44px' }}
           className={`
-            px-4 py-1 text-sm font-medium
+            py-1 text-sm font-medium text-center
             ${currentLang === code 
               ? 'bg-[#5788FA] text-black' 
               : 'hover:bg-[#5788FA]/10'
